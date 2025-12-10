@@ -1,4 +1,4 @@
-2025 Au CSE 493S Project
+2025 Au CSE 493S Project: Paragraph-level Textual Semantic Similarity
 ==============
 'Paragraph Similarity' project. To compare the effectiveness of evaluation metrics and to develop a fine-tuned model for the task of paragraph similarity detection.
 
