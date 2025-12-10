@@ -4,6 +4,8 @@ class BERTScore:
     def __init__(self, model=None, idf=False):
         if model == None:
             self.model = "roberta-large"
+        else:
+            self.model = model
         self.idf = idf
     
     def score(self, cands, refs) -> list[float]:
@@ -14,7 +16,9 @@ class BERTScore:
         res = bert_score.score(cands, refs, num_layers=17, model_type=self.model, idf=self.idf, lang="en")
         
         # return only the f-score components
-        return res[2].tolist()
+        res = res[2].tolist()
+        res = [float(x) for x in res] #and convert to float
+        return res
 
 if __name__ == "__main__":
     import time
