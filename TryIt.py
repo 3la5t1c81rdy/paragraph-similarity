@@ -7,23 +7,36 @@ CALIBRATIONMAP_PATH = "Model/CalibrationMap.cpkl"
 #####
 
 if __name__ == "__main__":
+    p = input("Before loading anything, do you want to only try the trained predictor? It will be quite a bit swifter that way. Type 'y' if so: ")
+    if p.lower() == "y":
+        p = True
+    else:
+        p = False
     print("Takes a while to load...")
     import torch
-    from Predictors.BLEU import BLEU
-    from Predictors.BERTScore import BERTScore
+    if not p:
+        from Predictors.BLEU import BLEU
+        from Predictors.BERTScore import BERTScore
     from Predictors.SE_F1 import SE_F1, CalibratedSE_F1
     from Utils.Utils import Recover_Object
     torch.set_default_device("cpu")
-    print("done!")
+    print("done! Now loading predictors...")
     
-    BL = BLEU()
-    BS = BERTScore()
-    SF = SE_F1()
+    if not p:
+        BL = BLEU()
+        BS = BERTScore()
+        SF = SE_F1()
     CSF = CalibratedSE_F1(MODEL, Recover_Object(CALIBRATIONMAP_PATH))
     print("Predictors loaded.")
-    p1 = input("Enter the first paragraph: ")
-    p2 = input("Enter the first paragraph: ")
-    print("BLEU: ", BL.score([p1], [p2]))
-    print("BERTScore: ", BS.score([p1], [p2]))
-    print("SE-F1 (base)", SF.score([p1], [p2]))
-    print("Trained Predictor (calibrated SE-F1)", CSF.score([p1], [p2]))
+    go = True
+    while go:
+        p1 = input("Enter the first paragraph: ")
+        p2 = input("Enter the first paragraph: ")
+        if not p:
+            print("BLEU: ", BL.score([p1], [p2]))
+            print("BERTScore: ", BS.score([p1], [p2]))
+            print("SE-F1 (base): ", SF.score([p1], [p2]))
+        print("Trained Predictor (calibrated SE-F1): ", CSF.score([p1], [p2]))
+        y = input("Try again? ('y' to try again) ")
+        if y.lower() != "y":
+            go = False
